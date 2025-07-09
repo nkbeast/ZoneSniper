@@ -1,7 +1,7 @@
 <h1 align="center">💣 ZoneSniper - DNS AXFR Vulnerability Scanner</h1>
 
 <p align="center">
-  <img src="https://i.imgur.com/OMu7bzg.png" width="600" alt="zonesniper-banner">
+  <img src="https://i.imgur.com/OMu7bzg.png](https://raw.githubusercontent.com/yourusername/zonesniper/main/assets/banner.png" width="600" alt="zonesniper-banner">
 </p>
 
 <h4 align="center">🔫 DNS Zone Transfer vulnerability scanner (AXFR) with multi-threading, bulk input, verbose mode & HTML reporting.</h4>
