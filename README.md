@@ -1,2 +1,43 @@
-# ZoneSniper
-ZoneSniper is a fast and lightweight tool to find DNS servers vulnerable to zone transfer (AXFR). It supports bulk scanning, threaded execution, and clean HTML reporting — perfect for recon and bug bounty automation.
+<h1 align="center">💣 ZoneSniper - DNS AXFR Vulnerability Scanner</h1>
+
+<p align="center">
+  <img src="https://i.imgur.com/OMu7bzg.png" width="600" alt="zonesniper-banner">
+</p>
+
+<h4 align="center">🔫 DNS Zone Transfer vulnerability scanner (AXFR) with multi-threading, bulk input, verbose mode & HTML reporting.</h4>
+<br>
+
+---
+
+## 🧾 Description
+
+**ZoneSniper** is a blazing-fast, fully automated scanner that detects misconfigured DNS servers allowing AXFR (zone transfer). Ideal for bug bounty hunters, penetration testers, and red teamers, it handles large input lists with multi-threaded precision and exports clean vulnerability reports in HTML.
+
+---
+
+## ✨ Features
+
+- 🎯 Scans for AXFR (zone transfer) vulnerabilities
+- 📂 Bulk input support using `--list`
+- ⚡ Multi-threaded scanning with `--threads`
+- 🤫 Silent/Verbose mode with `--verbose`
+- 📄 HTML Report generation
+- 💥 AK-47-themed banner for terminal fun
+
+---
+
+## 🚀 Usage
+
+```bash
+# Scan a single domain
+python3 zonesniper.py --domain zonetransfer.me
+
+# Bulk domain scan from file
+python3 zonesniper.py --list domains.txt
+
+# Use verbose mode to see full results
+python3 zonesniper.py --list domains.txt --verbose
+
+# Set custom thread count (default is 10)
+python3 zonesniper.py --list domains.txt --threads 30
+
