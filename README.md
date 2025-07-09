@@ -40,3 +40,10 @@ python3 zonesniper.py --list domains.txt --verbose
 # Set custom thread count (default is 10)
 python3 zonesniper.py --list domains.txt --threads 30
 
+```
+
+## OUTPUT
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nkbeast/ZoneSniper/refs/heads/main/zonesnipher2.png" width="600" alt="zonesniper-banner2">
+</p>
