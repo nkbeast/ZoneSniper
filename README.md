@@ -22,8 +22,7 @@
 - ⚡ Multi-threaded scanning with `--threads`
 - 🤫 Silent/Verbose mode with `--verbose`
 - 📄 HTML Report generation
-- 💥 AK-47-themed banner for terminal fun
-
+  
 ---
 
 ## 🚀 Usage
