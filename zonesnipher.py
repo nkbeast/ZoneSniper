@@ -4,6 +4,7 @@ import threading
 import time
 import sys
 import os
+import requests
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
@@ -47,7 +48,18 @@ def show_banner():
     print("\n\033[92mSniping misconfigured DNS servers...\033[0m")
     print("-" * 70)
 
-def dig_zone_transfer(domain):
+def send_discord_webhook(domain, ns, zone_data, webhook_url):
+    if not webhook_url:
+        return
+    message = f"🚨 **Zone Transfer Detected**\n**Domain:** {domain}\n**Nameserver:** {ns}\n```\n{zone_data[:1800]}\n...truncated\n```"
+    try:
+        response = requests.post(webhook_url, json={"content": message})
+        if response.status_code != 204:
+            print(f"[!] Failed to send webhook: {response.status_code} {response.text}")
+    except Exception as e:
+        print(f"[!] Exception sending webhook: {e}")
+
+def dig_zone_transfer(domain, webhook_url=None):
     try:
         ns_lookup = subprocess.run(["dig", domain, "NS", "+short"], capture_output=True, text=True, timeout=5)
         nameservers = [line.strip() for line in ns_lookup.stdout.splitlines() if line.strip()]
@@ -68,7 +80,9 @@ def dig_zone_transfer(domain):
 
             if len(output.splitlines()) > 3:
                 print(f"\n\033[91m[VULNERABLE]\033[0m {domain} → AXFR allowed on: {ns}")
-                vulnerable_results.append((domain, ns, axfr.stdout.strip()))
+                zone_data = axfr.stdout.strip()
+                vulnerable_results.append((domain, ns, zone_data))
+                send_discord_webhook(domain, ns, zone_data, webhook_url)
                 vulnerable = True
                 return
         except subprocess.TimeoutExpired:
@@ -107,12 +121,15 @@ def main():
 
     parser = argparse.ArgumentParser(description="Zone Transfer Sniper by NK")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--domain", help="Check a single domain")
-    group.add_argument("--list", help="File containing domains to scan")
-    parser.add_argument("--verbose", action="store_true", help="Show non-vulnerable domains too")
-    args = parser.parse_args()
+    group.add_argument("-d", "--domain", help="Check a single domain")
+    group.add_argument("-l", "--list", help="File containing domains to scan")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Show non-vulnerable domains too")
+    parser.add_argument("--webhook", help="Discord webhook URL for notifications")
 
+    args = parser.parse_args()
     verbose_mode = args.verbose
+    webhook_url = args.webhook
+
     show_banner()
 
     if not verbose_mode:
@@ -123,14 +140,14 @@ def main():
         if args.domain:
             domain = clean_domain(args.domain)
             if domain:
-                dig_zone_transfer(domain)
+                dig_zone_transfer(domain, webhook_url)
 
         elif args.list:
             try:
                 with open(args.list, "r") as f:
                     raw = [clean_domain(line) for line in f if clean_domain(line)]
                 with ThreadPoolExecutor(max_workers=50) as executor:
-                    executor.map(dig_zone_transfer, raw)
+                    executor.map(lambda domain: dig_zone_transfer(domain, webhook_url), raw)
             except FileNotFoundError:
                 print(f"\n\033[91m[ERROR]\033[0m File not found: {args.list}")
     finally:
