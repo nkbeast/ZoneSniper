@@ -36,16 +36,16 @@ cd Zonesnipher
 pip install dnspython
 
 # Scan a single domain
-python3 zonesniper.py --domain zonetransfer.me
+python3 zonesniper.py -d zonetransfer.me
 
 # Bulk domain scan from file
-python3 zonesniper.py --list domains.txt
+python3 zonesniper.py -l domains.txt
 
 # Use verbose mode to see full results
-python3 zonesniper.py --list domains.txt --verbose
+python3 zonesniper.py -l domains.txt --verbose
 
 # Set custom thread count (default is 10)
-python3 zonesniper.py --list domains.txt --threads 30
+python3 zonesniper.py - domains.txt --threads 30
 
 ```
 
